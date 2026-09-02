@@ -168,7 +168,7 @@
           </mxswa:ActivityReference>
           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.GetConfigurationValueByEnvironment, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep421">
             <mxswa:ActivityReference.Arguments>
-              <InArgument x:TypeArguments="x:String" x:Key="ConfigurationKey">[DirectCast(CustomActivityStep421_1_converted, System.String)]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="ConfigurationKey">[DirectCast(CustomActivityStep421_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
               <OutArgument x:TypeArguments="x:String" x:Key="ConfigurationValue">[CustomActivityStep421ConfigurationValue_localParameter]</OutArgument>
             </mxswa:ActivityReference.Arguments>
           </mxswa:ActivityReference>
@@ -232,8 +232,8 @@
           </mxswa:ActivityReference>
           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.EncryptionWorkflowActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep422">
             <mxswa:ActivityReference.Arguments>
-              <InArgument x:TypeArguments="x:String" x:Key="Operation">[DirectCast(CustomActivityStep422_1_converted, System.String)]</InArgument>
-              <InArgument x:TypeArguments="x:String" x:Key="InputValue">[DirectCast(CustomActivityStep422_2_converted, System.String)]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Operation">[DirectCast(CustomActivityStep422_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="InputValue">[DirectCast(CustomActivityStep422_2_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
               <OutArgument x:TypeArguments="x:String" x:Key="Result">[CustomActivityStep422Result_localParameter]</OutArgument>
             </mxswa:ActivityReference.Arguments>
           </mxswa:ActivityReference>
@@ -519,28 +519,28 @@
           </mxswa:ActivityReference>
           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.BuildStringFromTemplate, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep423">
             <mxswa:ActivityReference.Arguments>
-              <InArgument x:TypeArguments="x:String" x:Key="SourceTemplate">[DirectCast(CustomActivityStep423_1_converted, System.String)]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="SourceTemplate">[DirectCast(CustomActivityStep423_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
               <InArgument x:TypeArguments="x:Boolean" x:Key="RemoveUnresolvedTokens">[DirectCast(CustomActivityStep423_2_converted, System.Boolean)]</InArgument>
-              <InArgument x:TypeArguments="x:String" x:Key="Replacement1Name">[DirectCast(CustomActivityStep423_3_converted, System.String)]</InArgument>
-              <InArgument x:TypeArguments="x:String" x:Key="Replacement1Value">[DirectCast(CustomActivityStep423_4_converted, System.String)]</InArgument>
-              <InArgument x:TypeArguments="x:String" x:Key="Replacement2Name">[DirectCast(CustomActivityStep423_5_converted, System.String)]</InArgument>
-              <InArgument x:TypeArguments="x:String" x:Key="Replacement2Value">[DirectCast(CustomActivityStep423_6_converted, System.String)]</InArgument>
-              <InArgument x:TypeArguments="x:String" x:Key="Replacement3Name">[DirectCast(CustomActivityStep423_7_converted, System.String)]</InArgument>
-              <InArgument x:TypeArguments="x:String" x:Key="Replacement3Value">[DirectCast(CustomActivityStep423_8_converted, System.String)]</InArgument>
-              <InArgument x:TypeArguments="x:String" x:Key="Replacement4Name">[DirectCast(CustomActivityStep423_9_converted, System.String)]</InArgument>
-              <InArgument x:TypeArguments="x:String" x:Key="Replacement4Value">[DirectCast(CustomActivityStep423_10_converted, System.String)]</InArgument>
-              <InArgument x:TypeArguments="x:String" x:Key="Replacement5Name">[DirectCast(CustomActivityStep423_11_converted, System.String)]</InArgument>
-              <InArgument x:TypeArguments="x:String" x:Key="Replacement5Value">[DirectCast(CustomActivityStep423_12_converted, System.String)]</InArgument>
-              <InArgument x:TypeArguments="x:String" x:Key="Replacement6Name">[DirectCast(CustomActivityStep423_13_converted, System.String)]</InArgument>
-              <InArgument x:TypeArguments="x:String" x:Key="Replacement6Value">[DirectCast(CustomActivityStep423_14_converted, System.String)]</InArgument>
-              <InArgument x:TypeArguments="x:String" x:Key="Replacement7Name">[DirectCast(CustomActivityStep423_15_converted, System.String)]</InArgument>
-              <InArgument x:TypeArguments="x:String" x:Key="Replacement7Value">[DirectCast(CustomActivityStep423_16_converted, System.String)]</InArgument>
-              <InArgument x:TypeArguments="x:String" x:Key="Replacement8Name">[DirectCast(CustomActivityStep423_17_converted, System.String)]</InArgument>
-              <InArgument x:TypeArguments="x:String" x:Key="Replacement8Value">[DirectCast(CustomActivityStep423_18_converted, System.String)]</InArgument>
-              <InArgument x:TypeArguments="x:String" x:Key="Replacement9Name">[DirectCast(CustomActivityStep423_19_converted, System.String)]</InArgument>
-              <InArgument x:TypeArguments="x:String" x:Key="Replacement9Value">[DirectCast(CustomActivityStep423_20_converted, System.String)]</InArgument>
-              <InArgument x:TypeArguments="x:String" x:Key="Replacement10Name">[DirectCast(CustomActivityStep423_21_converted, System.String)]</InArgument>
-              <InArgument x:TypeArguments="x:String" x:Key="Replacement10Value">[DirectCast(CustomActivityStep423_22_converted, System.String)]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Replacement1Name">[DirectCast(CustomActivityStep423_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Replacement1Value">[DirectCast(CustomActivityStep423_4_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Replacement2Name">[DirectCast(CustomActivityStep423_5_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Replacement2Value">[DirectCast(CustomActivityStep423_6_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Replacement3Name">[DirectCast(CustomActivityStep423_7_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Replacement3Value">[DirectCast(CustomActivityStep423_8_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Replacement4Name">[DirectCast(CustomActivityStep423_9_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Replacement4Value">[DirectCast(CustomActivityStep423_10_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Replacement5Name">[DirectCast(CustomActivityStep423_11_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Replacement5Value">[DirectCast(CustomActivityStep423_12_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Replacement6Name">[DirectCast(CustomActivityStep423_13_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Replacement6Value">[DirectCast(CustomActivityStep423_14_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Replacement7Name">[DirectCast(CustomActivityStep423_15_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Replacement7Value">[DirectCast(CustomActivityStep423_16_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Replacement8Name">[DirectCast(CustomActivityStep423_17_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Replacement8Value">[DirectCast(CustomActivityStep423_18_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Replacement9Name">[DirectCast(CustomActivityStep423_19_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Replacement9Value">[DirectCast(CustomActivityStep423_20_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Replacement10Name">[DirectCast(CustomActivityStep423_21_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="Replacement10Value">[DirectCast(CustomActivityStep423_22_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
               <OutArgument x:TypeArguments="x:String" x:Key="FinalString">[CustomActivityStep423FinalString_localParameter]</OutArgument>
               <OutArgument x:TypeArguments="x:String" x:Key="UnresolvedTokens">[CustomActivityStep423UnresolvedTokens_localParameter]</OutArgument>
             </mxswa:ActivityReference.Arguments>
@@ -1586,8 +1586,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep380">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep380_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep380_5_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep380_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep380_5_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep380IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep380NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep380ErrorMessage_localParameter]</OutArgument>
@@ -2473,8 +2473,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep381">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep381_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep381_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep381_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep381_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep381IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep381NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep381ErrorMessage_localParameter]</OutArgument>
@@ -3360,8 +3360,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep382">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep382_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep382_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep382_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep382_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep382IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep382NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep382ErrorMessage_localParameter]</OutArgument>
@@ -4247,8 +4247,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep383">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep383_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep383_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep383_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep383_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep383IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep383NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep383ErrorMessage_localParameter]</OutArgument>
@@ -5134,8 +5134,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep384">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep384_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep384_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep384_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep384_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep384IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep384NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep384ErrorMessage_localParameter]</OutArgument>
@@ -6021,8 +6021,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep385">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep385_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep385_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep385_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep385_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep385IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep385NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep385ErrorMessage_localParameter]</OutArgument>
@@ -6908,8 +6908,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep386">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep386_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep386_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep386_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep386_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep386IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep386NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep386ErrorMessage_localParameter]</OutArgument>
@@ -7795,8 +7795,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep387">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep387_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep387_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep387_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep387_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep387IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep387NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep387ErrorMessage_localParameter]</OutArgument>
@@ -8682,8 +8682,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep388">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep388_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep388_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep388_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep388_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep388IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep388NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep388ErrorMessage_localParameter]</OutArgument>
@@ -9569,8 +9569,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep389">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep389_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep389_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep389_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep389_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep389IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep389NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep389ErrorMessage_localParameter]</OutArgument>
@@ -10456,8 +10456,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep390">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep390_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep390_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep390_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep390_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep390IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep390NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep390ErrorMessage_localParameter]</OutArgument>
@@ -11343,8 +11343,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep391">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep391_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep391_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep391_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep391_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep391IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep391NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep391ErrorMessage_localParameter]</OutArgument>
@@ -12230,8 +12230,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep392">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep392_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep392_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep392_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep392_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep392IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep392NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep392ErrorMessage_localParameter]</OutArgument>
@@ -13117,8 +13117,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep393">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep393_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep393_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep393_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep393_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep393IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep393NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep393ErrorMessage_localParameter]</OutArgument>
@@ -14004,8 +14004,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep394">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep394_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep394_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep394_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep394_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep394IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep394NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep394ErrorMessage_localParameter]</OutArgument>
@@ -14891,8 +14891,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep404">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep404_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep404_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep404_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep404_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep404IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep404NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep404ErrorMessage_localParameter]</OutArgument>
@@ -15778,8 +15778,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep403">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep403_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep403_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep403_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep403_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep403IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep403NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep403ErrorMessage_localParameter]</OutArgument>
@@ -16665,8 +16665,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep402">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep402_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep402_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep402_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep402_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep402IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep402NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep402ErrorMessage_localParameter]</OutArgument>
@@ -17552,8 +17552,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep401">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep401_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep401_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep401_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep401_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep401IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep401NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep401ErrorMessage_localParameter]</OutArgument>
@@ -18439,8 +18439,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep400">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep400_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep400_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep400_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep400_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep400IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep400NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep400ErrorMessage_localParameter]</OutArgument>
@@ -19326,8 +19326,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep399">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep399_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep399_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep399_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep399_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep399IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep399NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep399ErrorMessage_localParameter]</OutArgument>
@@ -20213,8 +20213,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep398">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep398_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep398_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep398_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep398_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep398IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep398NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep398ErrorMessage_localParameter]</OutArgument>
@@ -21100,8 +21100,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep397">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep397_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep397_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep397_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep397_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep397IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep397NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep397ErrorMessage_localParameter]</OutArgument>
@@ -21987,8 +21987,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep396">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep396_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep396_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep396_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep396_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep396IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep396NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep396ErrorMessage_localParameter]</OutArgument>
@@ -22874,8 +22874,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep395">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep395_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep395_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep395_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep395_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep395IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep395NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep395ErrorMessage_localParameter]</OutArgument>
@@ -23870,8 +23870,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep420">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep420_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep420_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep420_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep420_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep420IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep420NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep420ErrorMessage_localParameter]</OutArgument>
@@ -24757,8 +24757,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep419">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep419_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep419_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep419_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep419_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep419IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep419NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep419ErrorMessage_localParameter]</OutArgument>
@@ -25644,8 +25644,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep418">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep418_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep418_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep418_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep418_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep418IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep418NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep418ErrorMessage_localParameter]</OutArgument>
@@ -26531,8 +26531,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep417">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep417_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep417_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep417_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep417_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep417IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep417NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep417ErrorMessage_localParameter]</OutArgument>
@@ -27418,8 +27418,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep416">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep416_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep416_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep416_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep416_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep416IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep416NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep416ErrorMessage_localParameter]</OutArgument>
@@ -28305,8 +28305,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep415">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep415_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep415_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep415_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep415_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep415IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep415NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep415ErrorMessage_localParameter]</OutArgument>
@@ -29192,8 +29192,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep414">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep414_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep414_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep414_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep414_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep414IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep414NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep414ErrorMessage_localParameter]</OutArgument>
@@ -30079,8 +30079,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep413">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep413_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep413_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep413_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep413_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep413IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep413NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep413ErrorMessage_localParameter]</OutArgument>
@@ -30966,8 +30966,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep412">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep412_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep412_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep412_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep412_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep412IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep412NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep412ErrorMessage_localParameter]</OutArgument>
@@ -31853,8 +31853,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep411">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep411_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep411_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep411_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep411_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep411IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep411NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep411ErrorMessage_localParameter]</OutArgument>
@@ -32740,8 +32740,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep410">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep410_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep410_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep410_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep410_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep410IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep410NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep410ErrorMessage_localParameter]</OutArgument>
@@ -33627,8 +33627,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep409">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep409_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep409_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep409_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep409_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep409IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep409NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep409ErrorMessage_localParameter]</OutArgument>
@@ -34514,8 +34514,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep408">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep408_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep408_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep408_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep408_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep408IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep408NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep408ErrorMessage_localParameter]</OutArgument>
@@ -35401,8 +35401,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep407">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep407_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep407_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep407_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep407_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep407IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep407NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep407ErrorMessage_localParameter]</OutArgument>
@@ -36288,8 +36288,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep406">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep406_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep406_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep406_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep406_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep406IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep406NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep406ErrorMessage_localParameter]</OutArgument>
@@ -37175,8 +37175,8 @@
                                           </mxswa:ActivityReference>
                                           <mxswa:ActivityReference AssemblyQualifiedName="MC._2P.Dynamics.TS.Workflows.SendSmsNotificationActivity, MC.2P.Dynamics.TS.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19add946701a3eea" DisplayName="CustomActivityStep405">
                                             <mxswa:ActivityReference.Arguments>
-                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep405_1_converted, System.String)]</InArgument>
-                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep405_3_converted, System.String)]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="PhoneNumber">[DirectCast(CustomActivityStep405_1_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
+                                              <InArgument x:TypeArguments="x:String" x:Key="Message">[DirectCast(CustomActivityStep405_3_converted, System.String) & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter]</InArgument>
                                               <OutArgument x:TypeArguments="x:Boolean" x:Key="IsSuccess">[CustomActivityStep405IsSuccess_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="NotificationId">[CustomActivityStep405NotificationId_localParameter]</OutArgument>
                                               <OutArgument x:TypeArguments="x:String" x:Key="ErrorMessage">[CustomActivityStep405ErrorMessage_localParameter]</OutArgument>
