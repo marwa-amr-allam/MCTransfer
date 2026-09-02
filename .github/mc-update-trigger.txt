@@ -1,1 +1,1 @@
-trigger large blob update
+inspect SMS syntax
