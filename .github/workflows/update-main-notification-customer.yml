@@ -17,56 +17,26 @@ jobs:
         run: |
           python3 - <<'PY'
           import base64, json, os, re, urllib.request
-
           owner = 'marwa-amr-allam'
           repo = 'MCTransfer'
           branch = 'main'
           path = 'Workflows/2P-MainNotification-Customer-33D4C37F-57B2-4AE5-A419-7AB67AB64530.xaml'
           api = f'https://api.github.com/repos/{owner}/{repo}/contents/{path}?ref={branch}'
-          headers = {
-              'Authorization': f"Bearer {os.environ['GH_TOKEN']}",
-              'Accept': 'application/vnd.github+json',
-              'X-GitHub-Api-Version': '2022-11-28',
-              'User-Agent': 'mc-workflow-update'
-          }
-
-          req = urllib.request.Request(api, headers=headers)
-          with urllib.request.urlopen(req) as r:
+          headers = {'Authorization': f"Bearer {os.environ['GH_TOKEN']}", 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'mc-workflow-update'}
+          with urllib.request.urlopen(urllib.request.Request(api, headers=headers)) as r:
               data = json.load(r)
-
           content = base64.b64decode(data['content']).decode('utf-8')
           sha = data['sha']
           suffix = ' & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter'
-
-          pattern = re.compile(
-              r'(<InArgument x:TypeArguments="x:String" x:Key="Message">)'
-              r'\[DirectCast\((CustomActivityStep\d+_\d+_converted), System\.String\)\]'
-              r'(</InArgument>)'
-          )
-
+          pattern = re.compile(r'\[DirectCast\((CustomActivityStep\d+_\d+_converted), System\.String\)\]')
           def replace(m):
-              expr = m.group(2)
-              return m.group(1) + '[DirectCast(' + expr + ', System.String)' + suffix + ']' + m.group(3)
-
+              return '[DirectCast(' + m.group(1) + ', System.String)' + suffix + ']'
           updated, count = pattern.subn(replace, content)
           print(f'Message expressions updated: {count}')
-
           if count == 0:
-              raise SystemExit(0)
-
-          body = json.dumps({
-              'message': 'feat: append refusal solution URL to customer SMS messages',
-              'content': base64.b64encode(updated.encode('utf-8')).decode('ascii'),
-              'sha': sha,
-              'branch': branch
-          }).encode('utf-8')
-
-          put = urllib.request.Request(
-              f'https://api.github.com/repos/{owner}/{repo}/contents/{path}',
-              data=body,
-              method='PUT',
-              headers={**headers, 'Content-Type': 'application/json'}
-          )
+              raise SystemExit('No matching SMS message expressions found')
+          body = json.dumps({'message': 'feat: append refusal solution URL to customer SMS messages', 'content': base64.b64encode(updated.encode('utf-8')).decode('ascii'), 'sha': sha, 'branch': branch}).encode('utf-8')
+          put = urllib.request.Request(f'https://api.github.com/repos/{owner}/{repo}/contents/{path}', data=body, method='PUT', headers={**headers, 'Content-Type': 'application/json'})
           with urllib.request.urlopen(put) as r:
               result = json.load(r)
           print('Updated commit:', result.get('commit', {}).get('sha'))
