@@ -17,27 +17,30 @@ jobs:
         run: |
           python3 - <<'PY'
           import base64, json, os, re, urllib.request
-          owner = 'marwa-amr-allam'
-          repo = 'MCTransfer'
-          branch = 'main'
+          owner = 'marwa-amr-allam'; repo = 'MCTransfer'; branch = 'main'
           path = 'Workflows/2P-MainNotification-Customer-33D4C37F-57B2-4AE5-A419-7AB67AB64530.xaml'
-          api = f'https://api.github.com/repos/{owner}/{repo}/contents/{path}?ref={branch}'
           headers = {'Authorization': f"Bearer {os.environ['GH_TOKEN']}", 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'mc-workflow-update'}
-          with urllib.request.urlopen(urllib.request.Request(api, headers=headers)) as r:
-              data = json.load(r)
-          content = base64.b64decode(data['content']).decode('utf-8')
-          sha = data['sha']
-          suffix = ' & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter'
+          api = f'https://api.github.com/repos/{owner}/{repo}/contents/{path}?ref={branch}'
+          with urllib.request.urlopen(urllib.request.Request(api, headers=headers)) as r: data = json.load(r)
+          content = base64.b64decode(data['content']).decode('utf-8'); sha = data['sha']
+          print('Length:', len(content))
+          print('DirectCast count:', content.count('DirectCast('))
+          print('Known step count:', content.count('CustomActivityStep380'))
+          print('Message count:', content.count('x:Key="Message"'))
           pattern = re.compile(r'\[DirectCast\((CustomActivityStep\d+_\d+_converted), System\.String\)\]')
-          def replace(m):
-              return '[DirectCast(' + m.group(1) + ', System.String)' + suffix + ']'
+          matches = pattern.findall(content)
+          print('Exact matches:', len(matches), matches[:30])
+          if not matches:
+              # Match the actual VB expression while allowing whitespace/newline variation.
+              pattern = re.compile(r'\[\s*DirectCast\(\s*(CustomActivityStep\d+_\d+_converted)\s*,\s*System\.String\s*\)\s*\]')
+              matches = pattern.findall(content)
+              print('Flexible matches:', len(matches), matches[:30])
+          suffix = ' & " if you refuse this solution Kindly Follow URL " & CustomActivityStep423FinalString_localParameter'
+          def replace(m): return '[DirectCast(' + m.group(1) + ', System.String)' + suffix + ']'
           updated, count = pattern.subn(replace, content)
-          print(f'Message expressions updated: {count}')
-          if count == 0:
-              raise SystemExit('No matching SMS message expressions found')
-          body = json.dumps({'message': 'feat: append refusal solution URL to customer SMS messages', 'content': base64.b64encode(updated.encode('utf-8')).decode('ascii'), 'sha': sha, 'branch': branch}).encode('utf-8')
-          put = urllib.request.Request(f'https://api.github.com/repos/{owner}/{repo}/contents/{path}', data=body, method='PUT', headers={**headers, 'Content-Type': 'application/json'})
-          with urllib.request.urlopen(put) as r:
-              result = json.load(r)
-          print('Updated commit:', result.get('commit', {}).get('sha'))
+          print('Updated:', count)
+          if count == 0: raise SystemExit('No SMS expressions found')
+          body = json.dumps({'message':'feat: append refusal solution URL to customer SMS messages','content':base64.b64encode(updated.encode()).decode(),'sha':sha,'branch':branch}).encode()
+          put = urllib.request.Request(f'https://api.github.com/repos/{owner}/{repo}/contents/{path}', data=body, method='PUT', headers={**headers,'Content-Type':'application/json'})
+          with urllib.request.urlopen(put) as r: print('Commit:', json.load(r).get('commit',{}).get('sha'))
           PY
