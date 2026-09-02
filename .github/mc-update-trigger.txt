@@ -1,1 +1,1 @@
-inspect SMS syntax
+verify SMS message suffixes
