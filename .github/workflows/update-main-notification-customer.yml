@@ -1,29 +1,30 @@
-name: Update Main Notification Customer
+name: Verify Main Notification Customer
 
 on:
   push:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  inspect:
+  verify:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
-      - name: Inspect XAML
+      - name: Verify XAML
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python3 - <<'PY'
-          import base64,json,os,urllib.request,re
+          import base64,json,os,re,urllib.request
           base='https://api.github.com/repos/marwa-amr-allam/MCTransfer'; path='Workflows/2P-MainNotification-Customer-33D4C37F-57B2-4AE5-A419-7AB67AB64530.xaml'
-          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28','User-Agent':'inspect'}
+          h={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28','User-Agent':'verify'}
           with urllib.request.urlopen(urllib.request.Request(f'{base}/contents/{path}?ref=main',headers=h)) as r:m=json.load(r)
           with urllib.request.urlopen(urllib.request.Request(f'{base}/git/blobs/{m["sha"]}',headers=h)) as r:b=json.load(r)
           s=base64.b64decode(b['content']).decode()
-          for term in ['x:Key="Message"','CustomActivityStep380_5_converted','SendSmsNotificationActivity']:
-              print('TERM',term,'COUNT',s.count(term))
-              i=s.find(term)
-              print(repr(s[max(0,i-500):i+1000]) if i>=0 else 'NOT FOUND')
+          blocks=re.findall(r'<InArgument[^>]*x:Key="Message">(.*?)</InArgument>',s,re.S)
+          suffix=' if you refuse this solution Kindly Follow URL '
+          good=[x for x in blocks if suffix in x and 'CustomActivityStep423FinalString_localParameter' in x]
+          print('SMS Message arguments:',len(blocks)); print('Correctly appended:',len(good)); print('Missing:',len(blocks)-len(good))
+          if len(blocks)==0 or len(good)!=len(blocks): raise SystemExit('Verification failed')
           PY
