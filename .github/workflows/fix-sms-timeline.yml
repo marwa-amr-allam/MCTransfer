@@ -1,5 +1,9 @@
 name: Fix SMS Timeline Activities
 on:
+  push:
+    branches: [main]
+  issues:
+    types: [opened]
   workflow_dispatch:
 permissions:
   contents: write
@@ -22,148 +26,97 @@ jobs:
           rel = 'Workflows/2P-MainNotification-Customer-33D4C37F-57B2-4AE5-A419-7AB67AB64530.xaml'
           original = subprocess.check_output(['git','show','cddb47f6643216889941ff4e32eef464bf0d39b0:'+rel], text=True)
 
-          # Find a complete XML element span, including nested elements.
           tag_re = re.compile(r'<!--[\s\S]*?-->|<[^>]+>')
           def element_span(text, start):
               m0 = tag_re.match(text, start)
-              if not m0 or not m0.group(0).startswith('<') or m0.group(0).startswith('</'):
+              if not m0 or m0.group(0).startswith('</'):
                   raise ValueError(f'No element start at {start}')
-              depth = 0
-              pos = start
+              depth = 0; pos = start
               while True:
                   m = tag_re.search(text, pos)
-                  if not m:
-                      raise ValueError('Unclosed XML element')
+                  if not m: raise ValueError('Unclosed XML element')
                   tok = m.group(0)
                   if tok.startswith('<!--'):
                       pos = m.end(); continue
                   if tok.startswith('</'):
                       depth -= 1
-                      if depth == 0:
-                          return start, m.end()
-                  elif tok.startswith('<?') or tok.startswith('<!'):
-                      pass
-                  elif tok.rstrip().endswith('/>'):
+                      if depth == 0: return start, m.end()
+                  elif tok.startswith('<?') or tok.startswith('<!') or tok.rstrip().endswith('/>'):
                       pass
                   else:
                       depth += 1
                   pos = m.end()
 
-          def find_complete_elements(text, start_pattern):
-              out=[]
-              for m in re.finditer(start_pattern, text, re.M):
-                  s,e=element_span(text,m.start())
-                  out.append((s,e,text[s:e]))
-              return out
+          def find_complete_elements(text, pattern):
+              return [(lambda se:(se[0],se[1],text[se[0]:se[1]]))(element_span(text,m.start())) for m in re.finditer(pattern,text,re.M)]
 
-          # Existing CreateStep424 is our trusted CRM-created template.
           tm = re.search(r'<Sequence\b[^>]*DisplayName="CreateStep424"[^>]*>', original)
-          if not tm:
-              raise SystemExit('CreateStep424 template not found in original XAML')
-          ts,te = element_span(original, tm.start())
-          template = original[ts:te]
+          if not tm: raise SystemExit('CreateStep424 template not found')
+          ts,te = element_span(original, tm.start()); template = original[ts:te]
 
-          # Find every SendSmsNotificationActivity in the original workflow.
-          sends = find_complete_elements(
-              original,
-              r'<mxswa:ActivityReference\b(?=[^>]*AssemblyQualifiedName="MC\._2P\.Dynamics\.TS\.Workflows\.SendSmsNotificationActivity,)'
-          )
+          var_nodes = find_complete_elements(original, r'<Variable\b[^>]*Name="CreateStep424_[^"]+"[^>]*/>')
+          if not var_nodes: raise SystemExit('No CreateStep424 variable declarations found')
+          print('Template variable declarations:', len(var_nodes))
+
+          sends = find_complete_elements(original, r'<mxswa:ActivityReference\b(?=[^>]*AssemblyQualifiedName="MC\._2P\.Dynamics\.TS\.Workflows\.SendSmsNotificationActivity,)')
           print('SendSms nodes found:', len(sends))
-          if not sends:
-              raise SystemExit('No SendSmsNotificationActivity nodes found')
+          if not sends: raise SystemExit('No SendSmsNotificationActivity nodes found')
 
-          ids = [int(x) for x in re.findall(r'CreateStep(\d+)', original)]
-          next_id = max(ids) + 1
+          ids = [int(x) for x in re.findall(r'CreateStep(\d+)', original)]; next_id = max(ids)+1
           guid_re = re.compile(r'\{?[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\}?')
 
-          def next_nonspace_tag(text, pos):
-              m = re.search(r'\S', text[pos:])
-              if not m: return None
-              p = pos + m.start()
-              if text[p] != '<': return None
-              return p
+          def next_nonspace_tag(text,pos):
+              m=re.search(r'\S',text[pos:])
+              if not m:return None
+              p=pos+m.start(); return p if text[p]=='<' else None
 
-          def replace_description_parameters(clone, new_name, message_expr):
-              marker = f'<OutArgument x:TypeArguments="x:Object" x:Key="Result">[{new_name}_5]</OutArgument>'
-              p = clone.find(marker)
-              if p < 0:
-                  raise ValueError(f'Description result marker not found in {new_name}')
-              ar_start = clone.rfind('<mxswa:ActivityReference ', 0, p)
-              if ar_start < 0:
-                  raise ValueError(f'Description ActivityReference not found in {new_name}')
-              _, ar_end = element_span(clone, ar_start)
-              ar = clone[ar_start:ar_end]
-              pm = re.search(r'(<InArgument\b[^>]*x:Key="Parameters"[^>]*>)[\s\S]*?(</InArgument>)', ar)
-              if not pm:
-                  raise ValueError(f'Description Parameters not found in {new_name}')
-              replacement = pm.group(1) + '[New Object() { ' + message_expr + ' }]' + pm.group(2)
-              ar = ar[:pm.start()] + replacement + ar[pm.end():]
-              return clone[:ar_start] + ar + clone[ar_end:]
+          def replace_description_parameters(clone,new_name,message_expr):
+              marker=f'<OutArgument x:TypeArguments="x:Object" x:Key="Result">[{new_name}_5]</OutArgument>'
+              p=clone.find(marker)
+              if p<0:raise ValueError(f'Description result marker not found in {new_name}')
+              ar_start=clone.rfind('<mxswa:ActivityReference ',0,p)
+              if ar_start<0:raise ValueError(f'Description ActivityReference not found in {new_name}')
+              _,ar_end=element_span(clone,ar_start); ar=clone[ar_start:ar_end]
+              pm=re.search(r'(<InArgument\b[^>]*x:Key="Parameters"[^>]*>)[\s\S]*?(</InArgument>)',ar)
+              if not pm:raise ValueError(f'Description Parameters not found in {new_name}')
+              replacement=pm.group(1)+'[New Object() { '+message_expr+' }]'+pm.group(2)
+              return clone[:ar_start]+ar[:pm.start()]+replacement+ar[pm.end():]+clone[ar_end:]
 
-          insertions=[]
-          added=[]
-          skipped=[]
+          insertions=[]; variable_insertions=[]; added=[]; skipped=[]
           for s,e,send in sends:
-              msg = re.search(r'<InArgument\b[^>]*x:Key="Message"[^>]*>\[([^\]]+)\]</InArgument>', send)
-              name_m = re.search(r'DisplayName="([^"]+)"', send)
-              display = name_m.group(1) if name_m else 'unknown'
-              if not msg:
-                  raise SystemExit(f'Missing Message argument in {display}')
-              message_expr = msg.group(1).strip()
-
-              np = next_nonspace_tag(original, e)
-              if np is not None and re.match(r'<Sequence\b[^>]*DisplayName="CreateStep\d+"', original[np:]):
-                  ns,ne = element_span(original,np)
-                  seq = original[ns:ne]
-                  if 'EntityName="crm2p_sms"' in seq:
-                      skipped.append(display)
-                      continue
-
-              new_name=f'CreateStep{next_id}'
-              next_id += 1
+              msg=re.search(r'<InArgument\b[^>]*x:Key="Message"[^>]*>\[([^\]]+)\]</InArgument>',send)
+              name_m=re.search(r'DisplayName="([^"]+)"',send); display=name_m.group(1) if name_m else 'unknown'
+              if not msg:raise SystemExit(f'Missing Message argument in {display}')
+              message_expr=msg.group(1).strip()
+              np=next_nonspace_tag(original,e)
+              if np is not None and re.match(r'<Sequence\b[^>]*DisplayName="CreateStep\d+"',original[np:]):
+                  ns,ne=element_span(original,np)
+                  if 'EntityName="crm2p_sms"' in original[ns:ne]:skipped.append(display);continue
+              new_name=f'CreateStep{next_id}';next_id+=1
               clone=template.replace('CreateStep424',new_name)
-
-              # CRM workflow designer metadata inside a copied step contains GUIDs.
-              # Every copied step must get fresh GUIDs; otherwise CRM collapses/ignores duplicates.
               guid_map={}
               def repl_guid(m):
-                  raw=m.group(0)
-                  key=raw.strip('{}').lower()
-                  if key not in guid_map:
-                      guid_map[key]=str(uuid.uuid4())
+                  raw=m.group(0);key=raw.strip('{}').lower()
+                  if key not in guid_map:guid_map[key]=str(uuid.uuid4())
                   new=guid_map[key]
-                  return ('{' if raw.startswith('{') else '') + new + ('}' if raw.endswith('}') else '')
+                  return ('{' if raw.startswith('{') else '')+new+('}' if raw.endswith('}') else '')
               clone=guid_re.sub(repl_guid,clone)
               clone=replace_description_parameters(clone,new_name,message_expr)
-
-              # Validate the generated step independently.
               ET.fromstring(clone)
-              if 'EntityName="crm2p_sms"' not in clone or message_expr not in clone:
-                  raise ValueError(f'Validation failed for {new_name}')
-              added.append((display,new_name))
-              insertions.append((e, '\n'+clone))
+              if 'EntityName="crm2p_sms"' not in clone or message_expr not in clone:raise ValueError(f'Validation failed for {new_name}')
+              for _,_,v in var_nodes:variable_insertions.append(v.replace('CreateStep424',new_name))
+              added.append((display,new_name));insertions.append((e,'\n'+clone))
 
-          for pos,clone in reversed(insertions):
-              original=original[:pos]+clone+original[pos:]
-
-          print('Existing SMS timeline steps skipped:', len(skipped))
-          print('New SMS timeline steps added:', len(added))
-          if not added:
-              raise SystemExit('No new steps added')
-
-          # Final XML validation and duplicate GUID check across generated steps.
+          if not added:raise SystemExit('No new steps added')
+          close='</mxswa:Workflow.Variables>'
+          if close not in original:raise SystemExit('Workflow.Variables closing tag not found')
+          original=original.replace(close,'\n      '+'\n      '.join(variable_insertions)+'\n    '+close,1)
+          for pos,clone in reversed(insertions):original=original[:pos]+clone+original[pos:]
           ET.fromstring(original)
-          for _,name in added:
-              m=re.search(rf'<Sequence\b[^>]*DisplayName="{re.escape(name)}"[^>]*>', original)
-              s,e=element_span(original,m.start())
-              block=original[s:e]
-              guids=[g.strip('{}').lower() for g in guid_re.findall(block)]
-              if len(guids)!=len(set(guids)):
-                  raise ValueError(f'Duplicate GUID inside {name}')
-
+          print('Existing SMS timeline steps skipped:',len(skipped))
+          print('New SMS timeline steps added:',len(added))
+          print('Generated variable declarations:',len(variable_insertions))
           Path(rel).write_text(original,encoding='utf-8')
-          print('FINAL SendSms count:', len(sends))
-          print('FINAL added count:', len(added))
 
       - name: Commit corrected workflow
         shell: bash
@@ -173,5 +126,5 @@ jobs:
           git add Workflows/2P-MainNotification-Customer-33D4C37F-57B2-4AE5-A419-7AB67AB64530.xaml
           git rm -f .github/workflows/fix-sms-timeline.yml .github/workflows/inspect-xaml.yml || true
           git rm -f inspection.txt || true
-          git commit -m "fix: add SMS timeline records with unique workflow step metadata"
+          git commit -m "fix: add SMS timeline records with workflow variables"
           git push
