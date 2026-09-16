@@ -16,50 +16,38 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
-          from zipfile import ZipFile, ZIP_DEFLATED
+          from zipfile import ZipFile
           import tempfile
           import shutil
           import xml.etree.ElementTree as ET
-          import re
 
           zip_path = Path('MCTransfer_1_0_0_0.zip')
           xaml_path = Path('Workflows/2P-MainNotification-Customer-33D4C37F-57B2-4AE5-A419-7AB67AB64530.xaml')
           target_name = xaml_path.name
 
-          if not zip_path.exists():
-              raise SystemExit(f'Missing solution ZIP: {zip_path}')
-          if not xaml_path.exists():
-              raise SystemExit(f'Missing source XAML: {xaml_path}')
-
           source = xaml_path.read_bytes()
           ET.fromstring(source)
 
           with ZipFile(zip_path, 'r') as zin:
-              names = zin.namelist()
-              matches = [n for n in names if Path(n).name == target_name]
+              matches = [n for n in zin.namelist() if Path(n).name == target_name]
               if len(matches) != 1:
-                  raise SystemExit(f'Expected exactly one {target_name} inside solution ZIP, found {len(matches)}: {matches}')
+                  raise SystemExit(f'Expected exactly one target XAML in ZIP, found {len(matches)}: {matches}')
               target = matches[0]
               print(f'ZIP target: {target}')
 
               with tempfile.TemporaryDirectory() as td:
-                  root = Path(td) / 'solution'
-                  root.mkdir()
-                  zin.extractall(root)
-
-                  target_file = root / target
-                  target_file.parent.mkdir(parents=True, exist_ok=True)
-                  target_file.write_bytes(source)
+                  root_dir = Path(td) / 'solution'
+                  root_dir.mkdir()
+                  zin.extractall(root_dir)
+                  (root_dir / target).write_bytes(source)
 
                   new_zip = Path(td) / 'patched.zip'
                   with ZipFile(new_zip, 'w') as zout:
                       for info in zin.infolist():
-                          data = (root / info.filename).read_bytes()
-                          zout.writestr(info, data)
-
+                          zout.writestr(info, (root_dir / info.filename).read_bytes())
                   shutil.copy2(new_zip, zip_path)
 
-          # Verify the actual binary package, not just the source XAML.
+          # Verify the actual binary package after patching.
           with ZipFile(zip_path, 'r') as z:
               data = z.read(target)
           root = ET.fromstring(data)
@@ -78,19 +66,28 @@ jobs:
               and e.attrib.get('DisplayName', '').startswith('CreateStep')
               and any(lname(c.tag) == 'CreateEntity' and c.attrib.get('EntityName') == 'crm2p_sms' for c in e.iter())
           ]
-          generated = [
-              e for e in sms
-              if re.fullmatch(r'CreateStep(?:42[5-9]|4[3-5]\\d|46[0-5])', e.attrib.get('DisplayName', ''))
-          ]
+          generated_numbers = []
+          for e in sms:
+              name = e.attrib.get('DisplayName', '')
+              if name.startswith('CreateStep'):
+                  try:
+                      n = int(name[len('CreateStep'):])
+                      if 425 <= n <= 465:
+                          generated_numbers.append(n)
+                  except ValueError:
+                      pass
+
           if len(sends) != 41:
-              raise SystemExit(f'ZIP verification failed: SendSms count={len(sends)}')
-          if len(generated) != 41 or len(sms) != 42:
-              raise SystemExit(f'ZIP verification failed: generated={len(generated)}, total crm2p_sms={len(sms)}')
+              raise SystemExit(f'ZIP verification failed: SendSms={len(sends)}')
+          if len(sms) != 42:
+              raise SystemExit(f'ZIP verification failed: total crm2p_sms={len(sms)}')
+          if sorted(generated_numbers) != list(range(425, 466)):
+              raise SystemExit(f'ZIP verification failed: generated CreateSteps={sorted(generated_numbers)}')
 
           print('ZIP verification PASSED')
           print(f'SendSmsNotificationActivity: {len(sends)}')
-          print(f'Generated CreateStep425-465: {len(generated)}')
-          print(f'Total crm2p_sms CreateSteps: {len(sms)}')
+          print('Generated CreateStep425-465: 41')
+          print('Total crm2p_sms CreateSteps: 42')
           PY
 
       - name: Commit patched solution ZIP
