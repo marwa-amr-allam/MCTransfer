@@ -35,6 +35,11 @@ jobs:
               m0 = tag_re.match(text, start)
               if not m0 or m0.group(0).startswith('</'):
                   raise ValueError(f'No element start at {start}')
+              first = m0.group(0)
+              # IMPORTANT: a self-closing element has no closing tag to scan for.
+              if first.rstrip().endswith('/>'):
+                  return start, m0.end()
+
               depth = 0
               pos = start
               while True:
@@ -177,7 +182,16 @@ jobs:
               1
           )
 
-          ET.fromstring(original)
+          try:
+              ET.fromstring(original)
+          except ET.ParseError as ex:
+              line, col = ex.position
+              lines = original.splitlines()
+              print(f'Generated XAML parse failure at line {line}, column {col}: {ex}')
+              for n in range(max(1, line - 3), min(len(lines), line + 3) + 1):
+                  print(f'{n}: {lines[n-1]}')
+              raise
+
           path.write_text(original, encoding='utf-8')
           print('Existing SMS timeline steps skipped:', len(skipped))
           print('New SMS timeline steps added:', len(added))
