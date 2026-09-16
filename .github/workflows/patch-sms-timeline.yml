@@ -1,0 +1,107 @@
+name: Patch SMS timeline activities
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Patch workflow
+        shell: python
+        run: |
+          import re
+          from pathlib import Path
+
+          path = Path('Workflows/2P-MainNotification-Customer-33D4C37F-57B2-4AE5-A419-7AB67AB64530.xaml')
+          text = path.read_text(encoding='utf-8-sig')
+
+          template_match = re.search(r'<Sequence DisplayName="CreateStep424">.*?</Sequence>', text, re.S)
+          if not template_match:
+              raise SystemExit('Could not find existing CreateStep424 template.')
+          template = template_match.group(0)
+
+          ids = [int(x) for x in re.findall(r'CreateStep(\d+)', text)]
+          next_id = max(ids) + 1
+
+          send_pattern = re.compile(r'<mxswa:ActivityReference\s+AssemblyQualifiedName="MC\._2P\.Dynamics\.TS\.Workflows\.SendSmsNotificationActivity,[\s\S]*?</mxswa:ActivityReference>', re.S)
+          matches = list(send_pattern.finditer(text))
+          if not matches:
+              raise SystemExit('No SendSmsNotificationActivity nodes found.')
+
+          insertions = []
+          added = []
+          skipped = []
+
+          for m in matches:
+              block = m.group(0)
+              display = re.search(r'DisplayName="([^"]+)"', block)
+              display_name = display.group(1) if display else 'unknown'
+
+              msg = re.search(r'<InArgument[^>]*x:Key="Message"[^>]*>\[([^\]]+)\]</InArgument>', block)
+              if not msg:
+                  skipped.append((display_name, 'no Message argument'))
+                  continue
+              message_expr = msg.group(1).strip()
+
+              after = text[m.end():]
+              next_seq = re.match(r'\s*<Sequence DisplayName="CreateStep\d+">([\s\S]*?</Sequence>)', after)
+              if next_seq and 'EntityName="crm2p_sms"' in next_seq.group(1):
+                  skipped.append((display_name, 'already followed by Create SMS'))
+                  continue
+
+              new_name = f'CreateStep{next_id}'
+              next_id += 1
+              clone = template.replace('CreateStep424', new_name)
+
+              marker = f'<OutArgument x:TypeArguments="x:Object" x:Key="Result">[{new_name}_5]</OutArgument>'
+              pos = clone.find(marker)
+              if pos < 0:
+                  raise SystemExit(f'Could not locate Description result in {new_name}.')
+              start = clone.rfind('<mxswa:ActivityReference ', 0, pos)
+              end = clone.find('</mxswa:ActivityReference>', pos)
+              if start < 0 or end < 0:
+                  raise SystemExit(f'Could not locate Description EvaluateExpression in {new_name}.')
+              end += len('</mxswa:ActivityReference>')
+              eval_block = clone[start:end]
+              param_pattern = re.compile(r'(<InArgument[^>]*x:Key="Parameters"[^>]*>)[\s\S]*?(</InArgument>)')
+              new_param = f'[New Object() {{ {message_expr} }}]'
+              eval_block, count = param_pattern.subn(lambda mm: mm.group(1) + new_param + mm.group(2), eval_block, count=1)
+              if count != 1:
+                  raise SystemExit(f'Could not set Description Parameters in {new_name}.')
+              clone = clone[:start] + eval_block + clone[end:]
+              insertions.append((m.end(), '\n' + clone))
+              added.append((display_name, new_name, message_expr))
+
+          for pos, clone in reversed(insertions):
+              text = text[:pos] + clone + text[pos:]
+
+          if not added:
+              raise SystemExit('No new Create SMS activities were added; refusing to commit.')
+          for _, new_name, message_expr in added:
+              b = re.search(rf'<Sequence DisplayName="{re.escape(new_name)}">.*?</Sequence>', text, re.S)
+              if not b or message_expr not in b.group(0):
+                  raise SystemExit(f'Validation failed for {new_name}.')
+
+          path.write_text(text, encoding='utf-8')
+          print(f'SendSms nodes found: {len(matches)}')
+          print(f'Create SMS activities added: {len(added)}')
+          print(f'Skipped: {len(skipped)}')
+
+      - name: Commit workflow changes and remove patcher
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Workflows/2P-MainNotification-Customer-33D4C37F-57B2-4AE5-A419-7AB67AB64530.xaml
+          git rm .github/workflows/patch-sms-timeline.yml
+          git commit -m "feat: create SMS timeline records for final notifications"
+          git push
