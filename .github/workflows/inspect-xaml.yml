@@ -3,7 +3,7 @@ on:
   push:
     branches: [main]
 permissions:
-  contents: read
+  contents: write
 jobs:
   inspect:
     runs-on: ubuntu-latest
@@ -26,14 +26,33 @@ jobs:
               for i,c in enumerate(list(e)):
                   walk(c,path+'/'+lname(e.tag)+f'[{i}]')
           walk(root)
-          print('SEND COUNT',len(sends))
-          for e,path,name in sends[:3]:
+          out=[]
+          out.append(f'SEND COUNT={len(sends)}')
+          for e,path,name in sends[:5]:
               parent=None
               for candidate in root.iter():
                   if e in list(candidate): parent=candidate; break
-              print('SEND',name,'parent=',lname(parent.tag) if parent is not None else None,'parent_children=',[lname(x.tag)+':'+x.attrib.get('DisplayName','') for x in list(parent)] if parent is not None else None)
+              out.append('SEND '+str(name))
+              out.append(' parent='+lname(parent.tag) if parent is not None else ' parent=None')
+              if parent is not None:
+                  out.append(' parent_children='+repr([(lname(x.tag),x.attrib.get('DisplayName',''),x.attrib.get('AssemblyQualifiedName','')) for x in list(parent)]))
           found=[e for e in root.iter() if e.attrib.get('DisplayName')=='CreateStep424']
-          print('CREATE424 COUNT',len(found))
+          out.append(f'CREATE424 COUNT={len(found)}')
           if found:
               e=found[0]
-              print('CREATE424 TAG',lname(e.tag),'children=',[lname(x.tag)+':'+x.attrib.get('DisplayName','') for x in list(e)])
+              out.append('CREATE424 TAG='+lname(e.tag))
+              out.append('CREATE424 CHILDREN='+repr([(lname(x.tag),x.attrib.get('DisplayName',''),x.attrib.get('AssemblyQualifiedName','')) for x in list(e)]))
+              for x in e.iter():
+                  if lname(x.tag)=='CreateEntity':
+                      out.append('CREATEENTITY ATTRS='+repr(x.attrib))
+          Path('/tmp/inspection.txt').write_text('\n'.join(out),encoding='utf-8')
+          print('\n'.join(out))
+      - name: Publish inspection
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          cp /tmp/inspection.txt inspection.txt
+          git add inspection.txt
+          git commit -m "chore: record original XAML inspection"
+          git push
