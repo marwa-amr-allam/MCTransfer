@@ -1,0 +1,107 @@
+name: Patch CRM solution ZIP
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Patch workflow inside solution ZIP
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile, ZIP_DEFLATED
+          import tempfile
+          import shutil
+          import xml.etree.ElementTree as ET
+          import re
+
+          zip_path = Path('MCTransfer_1_0_0_0.zip')
+          xaml_path = Path('Workflows/2P-MainNotification-Customer-33D4C37F-57B2-4AE5-A419-7AB67AB64530.xaml')
+          target_name = xaml_path.name
+
+          if not zip_path.exists():
+              raise SystemExit(f'Missing solution ZIP: {zip_path}')
+          if not xaml_path.exists():
+              raise SystemExit(f'Missing source XAML: {xaml_path}')
+
+          source = xaml_path.read_bytes()
+          ET.fromstring(source)
+
+          with ZipFile(zip_path, 'r') as zin:
+              names = zin.namelist()
+              matches = [n for n in names if Path(n).name == target_name]
+              if len(matches) != 1:
+                  raise SystemExit(f'Expected exactly one {target_name} inside solution ZIP, found {len(matches)}: {matches}')
+              target = matches[0]
+              print(f'ZIP target: {target}')
+
+              with tempfile.TemporaryDirectory() as td:
+                  root = Path(td) / 'solution'
+                  root.mkdir()
+                  zin.extractall(root)
+
+                  target_file = root / target
+                  target_file.parent.mkdir(parents=True, exist_ok=True)
+                  target_file.write_bytes(source)
+
+                  new_zip = Path(td) / 'patched.zip'
+                  with ZipFile(new_zip, 'w') as zout:
+                      for info in zin.infolist():
+                          data = (root / info.filename).read_bytes()
+                          zout.writestr(info, data)
+
+                  shutil.copy2(new_zip, zip_path)
+
+          # Verify the actual binary package, not just the source XAML.
+          with ZipFile(zip_path, 'r') as z:
+              data = z.read(target)
+          root = ET.fromstring(data)
+
+          def lname(tag):
+              return tag.rsplit('}', 1)[-1]
+
+          sends = [
+              e for e in root.iter()
+              if lname(e.tag) == 'ActivityReference'
+              and 'SendSmsNotificationActivity' in e.attrib.get('AssemblyQualifiedName', '')
+          ]
+          sms = [
+              e for e in root.iter()
+              if lname(e.tag) == 'Sequence'
+              and e.attrib.get('DisplayName', '').startswith('CreateStep')
+              and any(lname(c.tag) == 'CreateEntity' and c.attrib.get('EntityName') == 'crm2p_sms' for c in e.iter())
+          ]
+          generated = [
+              e for e in sms
+              if re.fullmatch(r'CreateStep(?:42[5-9]|4[3-5]\\d|46[0-5])', e.attrib.get('DisplayName', ''))
+          ]
+          if len(sends) != 41:
+              raise SystemExit(f'ZIP verification failed: SendSms count={len(sends)}')
+          if len(generated) != 41 or len(sms) != 42:
+              raise SystemExit(f'ZIP verification failed: generated={len(generated)}, total crm2p_sms={len(sms)}')
+
+          print('ZIP verification PASSED')
+          print(f'SendSmsNotificationActivity: {len(sends)}')
+          print(f'Generated CreateStep425-465: {len(generated)}')
+          print(f'Total crm2p_sms CreateSteps: {len(sms)}')
+          PY
+
+      - name: Commit patched solution ZIP
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add MCTransfer_1_0_0_0.zip
+          if git diff --cached --quiet; then
+            echo "Solution ZIP already contains the patched workflow."
+            exit 0
+          fi
+          git commit -m "fix: patch workflow inside CRM solution package"
+          git push
