@@ -1,0 +1,49 @@
+name: Replace Case Word - Employee Workflow
+
+on:
+  push:
+    paths:
+      - '.github/workflows/replace-case-word-employee.yml'
+
+jobs:
+  replace-word:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Replace Arabic wording
+        shell: python
+        run: |
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+
+          path = Path('Workflows/2P-MainNotification-Employee-5C9604F9-6961-436E-A7BA-B9A551179AB2.xaml')
+          text = path.read_text(encoding='utf-8')
+
+          old = 'القضية'
+          new = 'الشكوى'
+          count = text.count(old)
+
+          print(f'Occurrences before: {count}')
+          if count == 0:
+              raise SystemExit('No occurrences of القضية found in employee workflow.')
+
+          updated = text.replace(old, new)
+          path.write_text(updated, encoding='utf-8')
+
+          print(f'Occurrences after: {updated.count(old)}')
+          print(f'New wording occurrences: {updated.count(new)}')
+
+          ET.parse(path)
+          print('XAML XML validation: OK')
+
+      - name: Commit employee workflow change
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add Workflows/2P-MainNotification-Employee-5C9604F9-6961-436E-A7BA-B9A551179AB2.xaml
+          git commit -m 'fix: use الشكوى instead of القضية in employee emails'
+          git push
