@@ -1,0 +1,42 @@
+name: Inspect original workflow XAML
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: cddb47f6643216889941ff4e32eef464bf0d39b0
+      - name: Inspect XAML
+        shell: python
+        run: |
+          import xml.etree.ElementTree as ET
+          from pathlib import Path
+          p=Path('Workflows/2P-MainNotification-Customer-33D4C37F-57B2-4AE5-A419-7AB67AB64530.xaml')
+          root=ET.parse(p).getroot()
+          def lname(tag): return tag.rsplit('}',1)[-1]
+          sends=[]
+          def walk(e,path='root'):
+              if lname(e.tag)=='ActivityReference' and 'SendSmsNotificationActivity' in e.attrib.get('AssemblyQualifiedName',''):
+                  sends.append((e,path,e.attrib.get('DisplayName')))
+              for i,c in enumerate(list(e)):
+                  walk(c,path+'/'+lname(e.tag)+f'[{i}]')
+          walk(root)
+          print('SEND COUNT',len(sends))
+          for e,path,name in sends:
+              parent=None
+              for candidate in root.iter():
+                  if e in list(candidate): parent=candidate; break
+              print('SEND',name,'parent=',lname(parent.tag) if parent is not None else None,'parent_children=',[lname(x.tag)+':'+x.attrib.get('DisplayName','') for x in list(parent)] if parent is not None else None)
+              break
+          # Print first CreateStep424 subtree shape from original
+          found=[]
+          for e in root.iter():
+              if e.attrib.get('DisplayName')=='CreateStep424': found.append(e)
+          print('CREATE424 COUNT',len(found))
+          if found:
+              e=found[0]
+              print('CREATE424 TAG',lname(e.tag),'children=',[lname(x.tag)+':'+x.attrib.get('DisplayName','') for x in list(e)])
