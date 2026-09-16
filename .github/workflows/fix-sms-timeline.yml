@@ -26,32 +26,29 @@ jobs:
           rel = 'Workflows/2P-MainNotification-Customer-33D4C37F-57B2-4AE5-A419-7AB67AB64530.xaml'
           path = Path(rel)
           original = path.read_text(encoding='utf-8')
-          if not original.strip():
-              raise SystemExit('The current XAML file is empty.')
+          if not original.strip(): raise SystemExit('The current XAML file is empty.')
 
           tag_re = re.compile(r'<!--[\s\S]*?-->|<[^>]+>')
           def element_span(text, start):
               m0 = tag_re.match(text, start)
-              if not m0 or m0.group(0).startswith('</'):
-                  raise ValueError(f'No element start at {start}')
-              depth = 0; pos = start
+              if not m0 or m0.group(0).startswith('</'): raise ValueError(f'No element start at {start}')
+              depth=0; pos=start
               while True:
-                  m = tag_re.search(text, pos)
+                  m=tag_re.search(text,pos)
                   if not m: raise ValueError('Unclosed XML element')
-                  tok = m.group(0)
+                  tok=m.group(0)
                   if tok.startswith('<!--'): pass
                   elif tok.startswith('</'):
-                      depth -= 1
-                      if depth == 0: return start, m.end()
+                      depth-=1
+                      if depth==0: return start,m.end()
                   elif tok.startswith('<?') or tok.startswith('<!') or tok.rstrip().endswith('/>'): pass
-                  else: depth += 1
-                  pos = m.end()
+                  else: depth+=1
+                  pos=m.end()
 
           def find_elements(text, pattern):
               result=[]
-              for m in re.finditer(pattern, text, re.M):
-                  s,e=element_span(text,m.start())
-                  result.append((s,e,text[s:e]))
+              for m in re.finditer(pattern,text,re.M):
+                  s,e=element_span(text,m.start()); result.append((s,e,text[s:e]))
               return result
 
           tm=re.search(r'<Sequence\b[^>]*DisplayName="CreateStep424"[^>]*>',original)
@@ -72,8 +69,7 @@ jobs:
           guid_re=re.compile(r'\{?[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\}?')
 
           def clone_with_new_ids(text,new_name):
-              clone=text.replace('CreateStep424',new_name)
-              mapping={}
+              clone=text.replace('CreateStep424',new_name); mapping={}
               def repl(m):
                   raw=m.group(0); key=raw.strip('{}').lower()
                   if key not in mapping: mapping[key]=str(uuid.uuid4())
@@ -82,7 +78,6 @@ jobs:
               return guid_re.sub(repl,clone)
 
           def replace_description_message(clone,new_name,message_expr):
-              # Locate the description builder by its output variable, not by assembly name.
               marker=f'<OutArgument x:TypeArguments="x:Object" x:Key="Result">[{new_name}_5]</OutArgument>'
               p=clone.find(marker)
               if p<0: raise ValueError(f'Description result marker not found in {new_name}')
@@ -104,24 +99,22 @@ jobs:
 
           insertions=[]; variable_insertions=[]; added=[]; skipped=[]
           for s,e,send in sends:
-              mm=re.search(r'<InArgument\b[^>]*x:Key="Message"[^>]*>\[([^\]]+)\]</InArgument>',send)
+              mm=re.search(r'<InArgument\b[^>]*x:Key="Message"[^>]*>\[([\s\S]*?)\]</InArgument>',send)
               if not mm: raise SystemExit('A SendSmsNotificationActivity has no Message argument.')
               message_expr=mm.group(1).strip()
-              if has_following_sms_create(original,e):
-                  skipped.append(send); continue
+              if has_following_sms_create(original,e): skipped.append(send); continue
               new_name=f'CreateStep{next_id}'; next_id+=1
               clone=clone_with_new_ids(template,new_name)
               clone=replace_description_message(clone,new_name,message_expr)
-              ET.fromstring(clone)
+              # The clone is a fragment and inherits namespace declarations from the workflow root.
+              # Validate the complete document after insertion instead of parsing this detached fragment.
               if 'EntityName="crm2p_sms"' not in clone or message_expr not in clone:
                   raise ValueError(f'Validation failed for {new_name}')
-              for _,_,var in var_nodes:
-                  variable_insertions.append(var.replace('CreateStep424',new_name))
+              for _,_,var in var_nodes: variable_insertions.append(var.replace('CreateStep424',new_name))
               insertions.append((e,'\n'+clone)); added.append(new_name)
 
           if not added: raise SystemExit('No new SMS timeline steps were generated.')
-          for pos,clone in reversed(insertions):
-              original=original[:pos]+clone+original[pos:]
+          for pos,clone in reversed(insertions): original=original[:pos]+clone+original[pos:]
 
           close='</mxswa:Workflow.Variables>'
           if close not in original: raise SystemExit('Workflow.Variables closing tag not found.')
