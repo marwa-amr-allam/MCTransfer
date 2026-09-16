@@ -26,12 +26,10 @@ jobs:
           rel = 'Workflows/2P-MainNotification-Customer-33D4C37F-57B2-4AE5-A419-7AB67AB64530.xaml'
           path = Path(rel)
           original = path.read_text(encoding='utf-8')
-
           if not original.strip():
               raise SystemExit('The current XAML file is empty.')
 
-          # XML scanner that returns complete element spans, including nested children.
-          tag_re = re.compile(r'<!--[\\s\\S]*?-->|<[^>]+>')
+          tag_re = re.compile(r'<!--[\s\S]*?-->|<[^>]+>')
 
           def element_span(text, start):
               m0 = tag_re.match(text, start)
@@ -45,7 +43,8 @@ jobs:
                       raise ValueError('Unclosed XML element')
                   tok = m.group(0)
                   if tok.startswith('<!--'):
-                      pos = m.end(); continue
+                      pos = m.end()
+                      continue
                   if tok.startswith('</'):
                       depth -= 1
                       if depth == 0:
@@ -63,33 +62,29 @@ jobs:
                   result.append((s, e, text[s:e]))
               return result
 
-          # Find the existing CRM Create SMS sequence and use it as the structural template.
-          tm = re.search(r'<Sequence\\b[^>]*DisplayName="CreateStep424"[^>]*>', original)
+          tm = re.search(r'<Sequence\b[^>]*DisplayName="CreateStep424"[^>]*>', original)
           if not tm:
               raise SystemExit('CreateStep424 template not found in the current XAML.')
           ts, te = element_span(original, tm.start())
           template = original[ts:te]
+          print('CreateStep424 template found.')
 
-          # The CreateStep424 sequence references workflow variables. Clone their declarations too.
-          var_nodes = find_elements(original, r'<Variable\\b[^>]*Name="CreateStep424_[^"]+"[^>]*(?:/>|>.*?</Variable>)')
-          if not var_nodes:
-              # Try the common self-closing form explicitly.
-              var_nodes = find_elements(original, r'<Variable\\b[^>]*Name="CreateStep424_[^"]+"[^>]*/>')
+          var_nodes = find_elements(original, r'<Variable\b[^>]*Name="CreateStep424_[^"]+"[^>]*/>')
           if not var_nodes:
               raise SystemExit('No CreateStep424_* workflow variable declarations found.')
           print('Template variables:', len(var_nodes))
 
           sends = find_elements(
               original,
-              r'<mxswa:ActivityReference\\b(?=[^>]*AssemblyQualifiedName="MC\\._2P\\.Dynamics\\.TS\\.Workflows\\.SendSmsNotificationActivity,)'
+              r'<mxswa:ActivityReference\b(?=[^>]*AssemblyQualifiedName="MC\._2P\.Dynamics\.TS\.Workflows\.SendSmsNotificationActivity,)'
           )
           print('SendSms activities:', len(sends))
           if not sends:
               raise SystemExit('No SendSmsNotificationActivity activities found.')
 
-          ids = [int(x) for x in re.findall(r'DisplayName="CreateStep(\\d+)"', original)]
+          ids = [int(x) for x in re.findall(r'DisplayName="CreateStep(\d+)"', original)]
           next_id = max(ids) + 1 if ids else 500
-          guid_re = re.compile(r'\\{?[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\\}?')
+          guid_re = re.compile(r'\{?[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\}?')
 
           def clone_with_new_ids(text, old_name, new_name):
               clone = text.replace(old_name, new_name)
@@ -104,24 +99,22 @@ jobs:
               return guid_re.sub(repl, clone)
 
           def replace_description_message(clone, new_name, message_expr):
-              # Find the BuildStringFromTemplate ActivityReference inside the cloned Create step.
-              ar_pat = r'<mxswa:ActivityReference\\b[^>]*AssemblyQualifiedName="MC\\._2P\\.Dynamics\\.TS\\.Workflows\\.BuildStringFromTemplateActivity,[^>]*>'
+              ar_pat = r'<mxswa:ActivityReference\b[^>]*AssemblyQualifiedName="MC\._2P\.Dynamics\.TS\.Workflows\.BuildStringFromTemplateActivity,[^>]*>'
               arm = re.search(ar_pat, clone)
               if not arm:
                   raise ValueError(f'BuildStringFromTemplate activity not found in {new_name}')
               ars, are = element_span(clone, arm.start())
               ar = clone[ars:are]
-              pm = re.search(r'(<InArgument\\b[^>]*x:Key="Parameters"[^>]*>)[\\s\\S]*?(</InArgument>)', ar)
+              pm = re.search(r'(<InArgument\b[^>]*x:Key="Parameters"[^>]*>)[\s\S]*?(</InArgument>)', ar)
               if not pm:
                   raise ValueError(f'Parameters argument not found in {new_name}')
               replacement = pm.group(1) + '[New Object() { ' + message_expr + ' }]' + pm.group(2)
               ar = ar[:pm.start()] + replacement + ar[pm.end():]
               return clone[:ars] + ar + clone[are:]
 
-          # Determine whether a send is already immediately followed by a crm2p_sms Create step.
           def has_following_sms_create(text, end):
               tail = text[end:]
-              m = re.match(r'\\s*(<Sequence\\b[^>]*DisplayName="CreateStep\\d+"[^>]*>)', tail)
+              m = re.match(r'\s*(<Sequence\b[^>]*DisplayName="CreateStep\d+"[^>]*>)', tail)
               if not m:
                   return False
               s = end + m.start(1)
@@ -134,36 +127,35 @@ jobs:
           skipped = []
 
           for s, e, send in sends:
-              mm = re.search(r'<InArgument\\b[^>]*x:Key="Message"[^>]*>\\[([^\\]]+)\\]</InArgument>', send)
+              mm = re.search(r'<InArgument\b[^>]*x:Key="Message"[^>]*>\[([^\]]+)\]</InArgument>', send)
               if not mm:
                   raise SystemExit('A SendSmsNotificationActivity has no Message argument.')
               message_expr = mm.group(1).strip()
-
               if has_following_sms_create(original, e):
                   skipped.append(send)
                   continue
 
               new_name = f'CreateStep{next_id}'
               next_id += 1
-
               clone = clone_with_new_ids(template, 'CreateStep424', new_name)
               clone = replace_description_message(clone, new_name, message_expr)
-
-              # Ensure the cloned step is independently valid XML and contains the expected entity/message.
               ET.fromstring(clone)
               if 'EntityName="crm2p_sms"' not in clone or message_expr not in clone:
                   raise ValueError(f'Validation failed for {new_name}')
 
               for _, _, var in var_nodes:
                   variable_insertions.append(var.replace('CreateStep424', new_name))
-
               insertions.append((e, '\n' + clone))
-              added.append((new_name, message_expr))
+              added.append(new_name)
 
           if not added:
               raise SystemExit('No new SMS timeline steps were generated.')
 
-          # Insert cloned workflow variables once, immediately before the Workflow.Variables closing tag.
+          # IMPORTANT: activity offsets refer to the original string, so insert activities first.
+          for pos, clone in reversed(insertions):
+              original = original[:pos] + clone + original[pos:]
+
+          # Variable declarations do not depend on activity offsets, so add them afterwards.
           close = '</mxswa:Workflow.Variables>'
           if close not in original:
               raise SystemExit('Workflow.Variables closing tag not found.')
@@ -173,13 +165,8 @@ jobs:
               1
           )
 
-          # Insert activities from bottom to top so earlier offsets remain valid.
-          for pos, clone in reversed(insertions):
-              original = original[:pos] + clone + original[pos:]
-
           ET.fromstring(original)
           path.write_text(original, encoding='utf-8')
-
           print('Existing SMS timeline steps skipped:', len(skipped))
           print('New SMS timeline steps added:', len(added))
           print('New variable declarations:', len(variable_insertions))
