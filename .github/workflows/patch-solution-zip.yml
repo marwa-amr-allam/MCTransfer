@@ -1,17 +1,20 @@
 name: Patch CRM solution ZIP
+
 on:
   workflow_dispatch:
   push:
     branches: [main]
+
 permissions:
   contents: write
+
 jobs:
   patch:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Patch workflow inside solution ZIP
+      - name: Patch workflows inside solution ZIP
         shell: bash
         run: |
           python - <<'PY'
@@ -22,24 +25,34 @@ jobs:
           import xml.etree.ElementTree as ET
 
           zip_path = Path('MCTransfer_1_0_0_0.zip')
-          xaml_path = Path('Workflows/2P-MainNotification-Customer-33D4C37F-57B2-4AE5-A419-7AB67AB64530.xaml')
-          target_name = xaml_path.name
+          targets = [
+              Path('Workflows/2P-MainNotification-Customer-33D4C37F-57B2-4AE5-A419-7AB67AB64530.xaml'),
+              Path('Workflows/2P-MainNotification-Employee-5C9604F9-6961-436E-A7BA-B9A551179AB2.xaml'),
+          ]
 
-          source = xaml_path.read_bytes()
-          ET.fromstring(source)
+          sources = {}
+          for xaml_path in targets:
+              source = xaml_path.read_bytes()
+              ET.fromstring(source)
+              sources[xaml_path.name] = source
 
           with ZipFile(zip_path, 'r') as zin:
-              matches = [n for n in zin.namelist() if Path(n).name == target_name]
-              if len(matches) != 1:
-                  raise SystemExit(f'Expected exactly one target XAML in ZIP, found {len(matches)}: {matches}')
-              target = matches[0]
-              print(f'ZIP target: {target}')
+              zip_names = zin.namelist()
+              matches = {}
+              for xaml_path in targets:
+                  target_name = xaml_path.name
+                  found = [n for n in zip_names if Path(n).name == target_name]
+                  if len(found) != 1:
+                      raise SystemExit(f'Expected exactly one {target_name} in ZIP, found {len(found)}: {found}')
+                  matches[target_name] = found[0]
+                  print(f'ZIP target: {found[0]}')
 
               with tempfile.TemporaryDirectory() as td:
                   root_dir = Path(td) / 'solution'
                   root_dir.mkdir()
                   zin.extractall(root_dir)
-                  (root_dir / target).write_bytes(source)
+                  for target_name, target_path in matches.items():
+                      (root_dir / target_path).write_bytes(sources[target_name])
 
                   new_zip = Path(td) / 'patched.zip'
                   with ZipFile(new_zip, 'w') as zout:
@@ -49,19 +62,22 @@ jobs:
 
           # Verify the actual binary package after patching.
           with ZipFile(zip_path, 'r') as z:
-              data = z.read(target)
-          root = ET.fromstring(data)
+              customer_data = z.read(matches[targets[0].name])
+              employee_data = z.read(matches[targets[1].name])
+
+          customer_root = ET.fromstring(customer_data)
+          employee_root = ET.fromstring(employee_data)
 
           def lname(tag):
               return tag.rsplit('}', 1)[-1]
 
           sends = [
-              e for e in root.iter()
+              e for e in customer_root.iter()
               if lname(e.tag) == 'ActivityReference'
               and 'SendSmsNotificationActivity' in e.attrib.get('AssemblyQualifiedName', '')
           ]
           sms = [
-              e for e in root.iter()
+              e for e in customer_root.iter()
               if lname(e.tag) == 'Sequence'
               and e.attrib.get('DisplayName', '').startswith('CreateStep')
               and any(lname(c.tag) == 'CreateEntity' and c.attrib.get('EntityName') == 'crm2p_sms' for c in e.iter())
@@ -78,16 +94,25 @@ jobs:
                       pass
 
           if len(sends) != 41:
-              raise SystemExit(f'ZIP verification failed: SendSms={len(sends)}')
+              raise SystemExit(f'Customer ZIP verification failed: SendSms={len(sends)}')
           if len(sms) != 42:
-              raise SystemExit(f'ZIP verification failed: total crm2p_sms={len(sms)}')
+              raise SystemExit(f'Customer ZIP verification failed: total crm2p_sms={len(sms)}')
           if sorted(generated_numbers) != list(range(425, 466)):
-              raise SystemExit(f'ZIP verification failed: generated CreateSteps={sorted(generated_numbers)}')
+              raise SystemExit(f'Customer ZIP verification failed: generated CreateSteps={sorted(generated_numbers)}')
+
+          old_word = '&#1575;&#1604;&#1602;&#1590;&#1610;&#1577;'
+          new_word = '&#1575;&#1604;&#1588;&#1603;&#1608;&#1609;'
+          employee_text = employee_data.decode('utf-8')
+          if old_word in employee_text or '&amp;#1575;&amp;#1604;&#1602;&#1590;&#1610;&#1577;' in employee_text:
+              raise SystemExit('Employee ZIP verification failed: old القضية encoding is still present')
+          if employee_text.count(new_word) < 4 and employee_text.count('&amp;#1575;&amp;#1604;&#1588;&#1603;&#1608;&#1609;') < 4:
+              raise SystemExit('Employee ZIP verification failed: expected four الشكوى replacements not found')
 
           print('ZIP verification PASSED')
-          print(f'SendSmsNotificationActivity: {len(sends)}')
-          print('Generated CreateStep425-465: 41')
-          print('Total crm2p_sms CreateSteps: 42')
+          print(f'Customer SendSmsNotificationActivity: {len(sends)}')
+          print('Customer generated CreateStep425-465: 41')
+          print('Customer total crm2p_sms CreateSteps: 42')
+          print('Employee Arabic wording verification: PASSED (4 replacements)')
           PY
 
       - name: Commit patched solution ZIP
@@ -97,8 +122,8 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add MCTransfer_1_0_0_0.zip
           if git diff --cached --quiet; then
-            echo "Solution ZIP already contains the patched workflow."
+            echo "Solution ZIP already contains the patched workflows."
             exit 0
           fi
-          git commit -m "fix: patch workflow inside CRM solution package"
+          git commit -m "fix: patch customer and employee workflows into solution package"
           git push
