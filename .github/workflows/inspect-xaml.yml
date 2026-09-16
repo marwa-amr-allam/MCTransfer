@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Repair generated CRM SMS variables
+      - name: Repair and validate CRM workflow XAML
         shell: bash
         run: |
           python - <<'PY'
@@ -30,42 +30,45 @@ jobs:
 
           block = text[start:end]
           pattern = re.compile(
-              r'^[ \\t]*<Variable\\b[^>]*\\bName="CreateStep(?:42[5-9]|4[3-5]\\d|46[0-5])_[1-7]"[^>]*/>[ \\t]*\\n?',
+              r'^\s*<Variable\b[^>]*\bName="CreateStep(?:42[5-9]|4[3-5]\d|46[0-5])_[1-7]"[^>]*/>\s*\n?',
               re.MULTILINE,
           )
           fixed_block, removed = pattern.subn('', block)
           fixed = text[:start] + fixed_block + text[end:]
 
-          # Parse after editing so a malformed workflow can never be committed.
+          # XML must remain valid.
           root = ET.fromstring(fixed)
+
+          def lname(tag):
+              return tag.rsplit('}', 1)[-1]
 
           sends = [
               e for e in root.iter()
-              if e.tag.rsplit('}', 1)[-1] == 'ActivityReference'
+              if lname(e.tag) == 'ActivityReference'
               and 'SendSmsNotificationActivity' in e.attrib.get('AssemblyQualifiedName', '')
           ]
+
           sms_sequences = [
               e.attrib.get('DisplayName')
               for e in root.iter()
-              if e.tag.rsplit('}', 1)[-1] == 'Sequence'
+              if lname(e.tag) == 'Sequence'
               and e.attrib.get('DisplayName', '').startswith('CreateStep')
               and any(
-                  c.tag.rsplit('}', 1)[-1] == 'CreateEntity'
+                  lname(c.tag) == 'CreateEntity'
                   and c.attrib.get('EntityName') == 'crm2p_sms'
                   for c in e.iter()
               )
           ]
+
           generated = [
               n for n in sms_sequences
-              if n and re.fullmatch(r'CreateStep(?:42[5-9]|4[3-5]\\d|46[0-5])', n)
+              if n and re.fullmatch(r'CreateStep(?:42[5-9]|4[3-5]\d|46[0-5])', n)
           ]
 
-          workflow = next(e for e in root.iter() if e.tag.rsplit('}', 1)[-1] == 'Workflow')
-          workflow_vars = next(e for e in workflow if e.tag.rsplit('}', 1)[-1] == 'Variables')
-          remaining = [
-              e.attrib.get('Name') for e in workflow_vars
-              if re.fullmatch(r'CreateStep(?:42[5-9]|4[3-5]\\d|46[0-5])_[1-7]', e.attrib.get('Name', ''))
-          ]
+          remaining = re.findall(
+              r'<Variable\b[^>]*\bName="CreateStep(?:42[5-9]|4[3-5]\d|46[0-5])_[1-7]"',
+              fixed_block,
+          )
 
           if len(sends) != 41:
               raise SystemExit(f'Expected 41 SendSms activities, found {len(sends)}')
