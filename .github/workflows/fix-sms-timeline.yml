@@ -30,146 +30,108 @@ jobs:
               raise SystemExit('The current XAML file is empty.')
 
           tag_re = re.compile(r'<!--[\s\S]*?-->|<[^>]+>')
-
           def element_span(text, start):
               m0 = tag_re.match(text, start)
               if not m0 or m0.group(0).startswith('</'):
                   raise ValueError(f'No element start at {start}')
-              depth = 0
-              pos = start
+              depth = 0; pos = start
               while True:
                   m = tag_re.search(text, pos)
-                  if not m:
-                      raise ValueError('Unclosed XML element')
+                  if not m: raise ValueError('Unclosed XML element')
                   tok = m.group(0)
-                  if tok.startswith('<!--'):
-                      pos = m.end()
-                      continue
-                  if tok.startswith('</'):
+                  if tok.startswith('<!--'): pass
+                  elif tok.startswith('</'):
                       depth -= 1
-                      if depth == 0:
-                          return start, m.end()
-                  elif tok.startswith('<?') or tok.startswith('<!') or tok.rstrip().endswith('/>'):
-                      pass
-                  else:
-                      depth += 1
+                      if depth == 0: return start, m.end()
+                  elif tok.startswith('<?') or tok.startswith('<!') or tok.rstrip().endswith('/>'): pass
+                  else: depth += 1
                   pos = m.end()
 
           def find_elements(text, pattern):
-              result = []
+              result=[]
               for m in re.finditer(pattern, text, re.M):
-                  s, e = element_span(text, m.start())
-                  result.append((s, e, text[s:e]))
+                  s,e=element_span(text,m.start())
+                  result.append((s,e,text[s:e]))
               return result
 
-          tm = re.search(r'<Sequence\b[^>]*DisplayName="CreateStep424"[^>]*>', original)
-          if not tm:
-              raise SystemExit('CreateStep424 template not found in the current XAML.')
-          ts, te = element_span(original, tm.start())
-          template = original[ts:te]
+          tm=re.search(r'<Sequence\b[^>]*DisplayName="CreateStep424"[^>]*>',original)
+          if not tm: raise SystemExit('CreateStep424 template not found.')
+          ts,te=element_span(original,tm.start()); template=original[ts:te]
           print('CreateStep424 template found.')
 
-          var_nodes = find_elements(original, r'<Variable\b[^>]*Name="CreateStep424_[^"]+"[^>]*/>')
-          if not var_nodes:
-              raise SystemExit('No CreateStep424_* workflow variable declarations found.')
-          print('Template variables:', len(var_nodes))
+          var_nodes=find_elements(original,r'<Variable\b[^>]*Name="CreateStep424_[^"]+"[^>]*/>')
+          if not var_nodes: raise SystemExit('No CreateStep424_* workflow variables found.')
+          print('Template variables:',len(var_nodes))
 
-          sends = find_elements(
-              original,
-              r'<mxswa:ActivityReference\b(?=[^>]*AssemblyQualifiedName="MC\._2P\.Dynamics\.TS\.Workflows\.SendSmsNotificationActivity,)'
-          )
-          print('SendSms activities:', len(sends))
-          if not sends:
-              raise SystemExit('No SendSmsNotificationActivity activities found.')
+          sends=find_elements(original,r'<mxswa:ActivityReference\b(?=[^>]*AssemblyQualifiedName="MC\._2P\.Dynamics\.TS\.Workflows\.SendSmsNotificationActivity,)')
+          print('SendSms activities:',len(sends))
+          if not sends: raise SystemExit('No SendSmsNotificationActivity activities found.')
 
-          ids = [int(x) for x in re.findall(r'DisplayName="CreateStep(\d+)"', original)]
-          next_id = max(ids) + 1 if ids else 500
-          guid_re = re.compile(r'\{?[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\}?')
+          ids=[int(x) for x in re.findall(r'DisplayName="CreateStep(\d+)"',original)]
+          next_id=max(ids)+1 if ids else 500
+          guid_re=re.compile(r'\{?[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\}?')
 
-          def clone_with_new_ids(text, old_name, new_name):
-              clone = text.replace(old_name, new_name)
-              mapping = {}
+          def clone_with_new_ids(text,new_name):
+              clone=text.replace('CreateStep424',new_name)
+              mapping={}
               def repl(m):
-                  raw = m.group(0)
-                  key = raw.strip('{}').lower()
-                  if key not in mapping:
-                      mapping[key] = str(uuid.uuid4())
-                  value = mapping[key]
-                  return ('{' if raw.startswith('{') else '') + value + ('}' if raw.endswith('}') else '')
-              return guid_re.sub(repl, clone)
+                  raw=m.group(0); key=raw.strip('{}').lower()
+                  if key not in mapping: mapping[key]=str(uuid.uuid4())
+                  v=mapping[key]
+                  return ('{' if raw.startswith('{') else '')+v+('}' if raw.endswith('}') else '')
+              return guid_re.sub(repl,clone)
 
-          def replace_description_message(clone, new_name, message_expr):
-              ar_pat = r'<mxswa:ActivityReference\b[^>]*AssemblyQualifiedName="MC\._2P\.Dynamics\.TS\.Workflows\.BuildStringFromTemplateActivity,[^>]*>'
-              arm = re.search(ar_pat, clone)
-              if not arm:
-                  raise ValueError(f'BuildStringFromTemplate activity not found in {new_name}')
-              ars, are = element_span(clone, arm.start())
-              ar = clone[ars:are]
-              pm = re.search(r'(<InArgument\b[^>]*x:Key="Parameters"[^>]*>)[\s\S]*?(</InArgument>)', ar)
-              if not pm:
-                  raise ValueError(f'Parameters argument not found in {new_name}')
-              replacement = pm.group(1) + '[New Object() { ' + message_expr + ' }]' + pm.group(2)
-              ar = ar[:pm.start()] + replacement + ar[pm.end():]
-              return clone[:ars] + ar + clone[are:]
+          def replace_description_message(clone,new_name,message_expr):
+              # Locate the description builder by its output variable, not by assembly name.
+              marker=f'<OutArgument x:TypeArguments="x:Object" x:Key="Result">[{new_name}_5]</OutArgument>'
+              p=clone.find(marker)
+              if p<0: raise ValueError(f'Description result marker not found in {new_name}')
+              ar_start=clone.rfind('<mxswa:ActivityReference ',0,p)
+              if ar_start<0: raise ValueError(f'Description ActivityReference not found in {new_name}')
+              _,ar_end=element_span(clone,ar_start)
+              ar=clone[ar_start:ar_end]
+              pm=re.search(r'(<InArgument\b[^>]*x:Key="Parameters"[^>]*>)[\s\S]*?(</InArgument>)',ar)
+              if not pm: raise ValueError(f'Description Parameters not found in {new_name}')
+              replacement=pm.group(1)+'[New Object() { '+message_expr+' }]'+pm.group(2)
+              ar=ar[:pm.start()]+replacement+ar[pm.end():]
+              return clone[:ar_start]+ar+clone[ar_end:]
 
-          def has_following_sms_create(text, end):
-              tail = text[end:]
-              m = re.match(r'\s*(<Sequence\b[^>]*DisplayName="CreateStep\d+"[^>]*>)', tail)
-              if not m:
-                  return False
-              s = end + m.start(1)
-              es, ee = element_span(text, s)
+          def has_following_sms_create(text,end):
+              m=re.match(r'\s*(<Sequence\b[^>]*DisplayName="CreateStep\d+"[^>]*>)',text[end:])
+              if not m:return False
+              s=end+m.start(1); es,ee=element_span(text,s)
               return 'EntityName="crm2p_sms"' in text[es:ee]
 
-          insertions = []
-          variable_insertions = []
-          added = []
-          skipped = []
-
-          for s, e, send in sends:
-              mm = re.search(r'<InArgument\b[^>]*x:Key="Message"[^>]*>\[([^\]]+)\]</InArgument>', send)
-              if not mm:
-                  raise SystemExit('A SendSmsNotificationActivity has no Message argument.')
-              message_expr = mm.group(1).strip()
-              if has_following_sms_create(original, e):
-                  skipped.append(send)
-                  continue
-
-              new_name = f'CreateStep{next_id}'
-              next_id += 1
-              clone = clone_with_new_ids(template, 'CreateStep424', new_name)
-              clone = replace_description_message(clone, new_name, message_expr)
+          insertions=[]; variable_insertions=[]; added=[]; skipped=[]
+          for s,e,send in sends:
+              mm=re.search(r'<InArgument\b[^>]*x:Key="Message"[^>]*>\[([^\]]+)\]</InArgument>',send)
+              if not mm: raise SystemExit('A SendSmsNotificationActivity has no Message argument.')
+              message_expr=mm.group(1).strip()
+              if has_following_sms_create(original,e):
+                  skipped.append(send); continue
+              new_name=f'CreateStep{next_id}'; next_id+=1
+              clone=clone_with_new_ids(template,new_name)
+              clone=replace_description_message(clone,new_name,message_expr)
               ET.fromstring(clone)
               if 'EntityName="crm2p_sms"' not in clone or message_expr not in clone:
                   raise ValueError(f'Validation failed for {new_name}')
+              for _,_,var in var_nodes:
+                  variable_insertions.append(var.replace('CreateStep424',new_name))
+              insertions.append((e,'\n'+clone)); added.append(new_name)
 
-              for _, _, var in var_nodes:
-                  variable_insertions.append(var.replace('CreateStep424', new_name))
-              insertions.append((e, '\n' + clone))
-              added.append(new_name)
+          if not added: raise SystemExit('No new SMS timeline steps were generated.')
+          for pos,clone in reversed(insertions):
+              original=original[:pos]+clone+original[pos:]
 
-          if not added:
-              raise SystemExit('No new SMS timeline steps were generated.')
-
-          # IMPORTANT: activity offsets refer to the original string, so insert activities first.
-          for pos, clone in reversed(insertions):
-              original = original[:pos] + clone + original[pos:]
-
-          # Variable declarations do not depend on activity offsets, so add them afterwards.
-          close = '</mxswa:Workflow.Variables>'
-          if close not in original:
-              raise SystemExit('Workflow.Variables closing tag not found.')
-          original = original.replace(
-              close,
-              '\n      ' + '\n      '.join(variable_insertions) + '\n    ' + close,
-              1
-          )
+          close='</mxswa:Workflow.Variables>'
+          if close not in original: raise SystemExit('Workflow.Variables closing tag not found.')
+          original=original.replace(close,'\n      '+'\n      '.join(variable_insertions)+'\n    '+close,1)
 
           ET.fromstring(original)
-          path.write_text(original, encoding='utf-8')
-          print('Existing SMS timeline steps skipped:', len(skipped))
-          print('New SMS timeline steps added:', len(added))
-          print('New variable declarations:', len(variable_insertions))
+          path.write_text(original,encoding='utf-8')
+          print('Existing SMS timeline steps skipped:',len(skipped))
+          print('New SMS timeline steps added:',len(added))
+          print('New variable declarations:',len(variable_insertions))
 
       - name: Validate generated XAML
         shell: python
@@ -177,16 +139,15 @@ jobs:
           import re
           import xml.etree.ElementTree as ET
           from pathlib import Path
-          p = Path('Workflows/2P-MainNotification-Customer-33D4C37F-57B2-4AE5-A419-7AB67AB64530.xaml')
-          text = p.read_text(encoding='utf-8')
+          p=Path('Workflows/2P-MainNotification-Customer-33D4C37F-57B2-4AE5-A419-7AB67AB64530.xaml')
+          text=p.read_text(encoding='utf-8')
           ET.fromstring(text)
-          sends = len(re.findall(r'SendSmsNotificationActivity', text))
-          creates = len(re.findall(r'EntityName="crm2p_sms"', text))
+          sends=len(re.findall(r'SendSmsNotificationActivity',text))
+          creates=len(re.findall(r'EntityName="crm2p_sms"',text))
           print('Final XML: valid')
-          print('SendSmsNotificationActivity references:', sends)
-          print('crm2p_sms create entities:', creates)
-          if creates < 2:
-              raise SystemExit('Validation failed: expected multiple crm2p_sms create entities.')
+          print('SendSmsNotificationActivity references:',sends)
+          print('crm2p_sms create entities:',creates)
+          if creates<2: raise SystemExit('Validation failed: expected multiple crm2p_sms create entities.')
 
       - name: Commit result and remove patcher
         shell: bash
