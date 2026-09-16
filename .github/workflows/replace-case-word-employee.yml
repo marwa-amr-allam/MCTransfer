@@ -23,20 +23,25 @@ jobs:
           path = Path('Workflows/2P-MainNotification-Employee-5C9604F9-6961-436E-A7BA-B9A551179AB2.xaml')
           text = path.read_text(encoding='utf-8')
 
-          old = 'القضية'
-          new = 'الشكوى'
-          count = text.count(old)
+          replacements = {
+              'القضية': 'الشكوى',
+              '&#1575;&#1604;&#1602;&#1590;&#1610;&#1577;': '&#1575;&#1604;&#1588;&#1603;&#1608;&#1609;',
+              '&amp;#1575;&amp;#1604;&amp;#1602;&amp;#1590;&amp;#1610;&amp;#1577;': '&amp;#1575;&amp;#1604;&amp;#1588;&amp;#1603;&amp;#1608;&amp;#1609;',
+          }
 
-          print(f'Occurrences before: {count}')
-          if count == 0:
-              raise SystemExit('No occurrences of القضية found in employee workflow.')
+          total = 0
+          for old, new in replacements.items():
+              count = text.count(old)
+              print(f'Occurrences of {old}: {count}')
+              if count:
+                  text = text.replace(old, new)
+                  total += count
 
-          updated = text.replace(old, new)
-          path.write_text(updated, encoding='utf-8')
+          print(f'Total replacements: {total}')
+          if total == 0:
+              raise SystemExit('No known representation of القضية found in employee workflow.')
 
-          print(f'Occurrences after: {updated.count(old)}')
-          print(f'New wording occurrences: {updated.count(new)}')
-
+          path.write_text(text, encoding='utf-8')
           ET.parse(path)
           print('XAML XML validation: OK')
 
