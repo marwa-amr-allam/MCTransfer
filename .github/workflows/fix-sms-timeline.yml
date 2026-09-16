@@ -2,6 +2,8 @@ name: Fix SMS Timeline Activities
 on:
   push:
     branches: [main]
+  issues:
+    types: [opened]
   workflow_dispatch:
 permissions:
   contents: write
@@ -29,8 +31,7 @@ jobs:
               m0 = tag_re.match(text, start)
               if not m0 or m0.group(0).startswith('</'):
                   raise ValueError(f'No element start at {start}')
-              depth = 0
-              pos = start
+              depth = 0; pos = start
               while True:
                   m = tag_re.search(text, pos)
                   if not m: raise ValueError('Unclosed XML element')
@@ -47,18 +48,12 @@ jobs:
                   pos = m.end()
 
           def find_complete_elements(text, pattern):
-              out=[]
-              for m in re.finditer(pattern, text, re.M):
-                  s,e=element_span(text,m.start())
-                  out.append((s,e,text[s:e]))
-              return out
+              return [(lambda se:(se[0],se[1],text[se[0]:se[1]]))(element_span(text,m.start())) for m in re.finditer(pattern,text,re.M)]
 
           tm = re.search(r'<Sequence\b[^>]*DisplayName="CreateStep424"[^>]*>', original)
           if not tm: raise SystemExit('CreateStep424 template not found')
-          ts,te = element_span(original, tm.start())
-          template = original[ts:te]
+          ts,te = element_span(original, tm.start()); template = original[ts:te]
 
-          # CreateStep424 uses workflow-scope variables. Copy those declarations too.
           var_nodes = find_complete_elements(original, r'<Variable\b[^>]*Name="CreateStep424_[^"]+"[^>]*/>')
           if not var_nodes: raise SystemExit('No CreateStep424 variable declarations found')
           print('Template variable declarations:', len(var_nodes))
@@ -67,79 +62,60 @@ jobs:
           print('SendSms nodes found:', len(sends))
           if not sends: raise SystemExit('No SendSmsNotificationActivity nodes found')
 
-          ids = [int(x) for x in re.findall(r'CreateStep(\d+)', original)]
-          next_id = max(ids) + 1
+          ids = [int(x) for x in re.findall(r'CreateStep(\d+)', original)]; next_id = max(ids)+1
           guid_re = re.compile(r'\{?[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\}?')
 
-          def next_nonspace_tag(text, pos):
-              m = re.search(r'\S', text[pos:])
-              if not m: return None
-              p = pos + m.start()
-              return p if text[p] == '<' else None
+          def next_nonspace_tag(text,pos):
+              m=re.search(r'\S',text[pos:])
+              if not m:return None
+              p=pos+m.start(); return p if text[p]=='<' else None
 
-          def replace_description_parameters(clone, new_name, message_expr):
-              marker = f'<OutArgument x:TypeArguments="x:Object" x:Key="Result">[{new_name}_5]</OutArgument>'
-              p = clone.find(marker)
-              if p < 0: raise ValueError(f'Description result marker not found in {new_name}')
-              ar_start = clone.rfind('<mxswa:ActivityReference ', 0, p)
-              if ar_start < 0: raise ValueError(f'Description ActivityReference not found in {new_name}')
-              _, ar_end = element_span(clone, ar_start)
-              ar = clone[ar_start:ar_end]
-              pm = re.search(r'(<InArgument\b[^>]*x:Key="Parameters"[^>]*>)[\s\S]*?(</InArgument>)', ar)
-              if not pm: raise ValueError(f'Description Parameters not found in {new_name}')
-              replacement = pm.group(1) + '[New Object() { ' + message_expr + ' }]' + pm.group(2)
-              return clone[:ar_start] + ar[:pm.start()] + replacement + ar[pm.end():] + clone[ar_end:]
+          def replace_description_parameters(clone,new_name,message_expr):
+              marker=f'<OutArgument x:TypeArguments="x:Object" x:Key="Result">[{new_name}_5]</OutArgument>'
+              p=clone.find(marker)
+              if p<0:raise ValueError(f'Description result marker not found in {new_name}')
+              ar_start=clone.rfind('<mxswa:ActivityReference ',0,p)
+              if ar_start<0:raise ValueError(f'Description ActivityReference not found in {new_name}')
+              _,ar_end=element_span(clone,ar_start); ar=clone[ar_start:ar_end]
+              pm=re.search(r'(<InArgument\b[^>]*x:Key="Parameters"[^>]*>)[\s\S]*?(</InArgument>)',ar)
+              if not pm:raise ValueError(f'Description Parameters not found in {new_name}')
+              replacement=pm.group(1)+'[New Object() { '+message_expr+' }]'+pm.group(2)
+              return clone[:ar_start]+ar[:pm.start()]+replacement+ar[pm.end():]+clone[ar_end:]
 
           insertions=[]; variable_insertions=[]; added=[]; skipped=[]
           for s,e,send in sends:
-              msg = re.search(r'<InArgument\b[^>]*x:Key="Message"[^>]*>\[([^\]]+)\]</InArgument>', send)
-              name_m = re.search(r'DisplayName="([^"]+)"', send)
-              display = name_m.group(1) if name_m else 'unknown'
-              if not msg: raise SystemExit(f'Missing Message argument in {display}')
-              message_expr = msg.group(1).strip()
-
-              np = next_nonspace_tag(original, e)
-              if np is not None and re.match(r'<Sequence\b[^>]*DisplayName="CreateStep\d+"', original[np:]):
-                  ns,ne = element_span(original,np)
-                  if 'EntityName="crm2p_sms"' in original[ns:ne]:
-                      skipped.append(display); continue
-
-              new_name=f'CreateStep{next_id}'; next_id += 1
+              msg=re.search(r'<InArgument\b[^>]*x:Key="Message"[^>]*>\[([^\]]+)\]</InArgument>',send)
+              name_m=re.search(r'DisplayName="([^"]+)"',send); display=name_m.group(1) if name_m else 'unknown'
+              if not msg:raise SystemExit(f'Missing Message argument in {display}')
+              message_expr=msg.group(1).strip()
+              np=next_nonspace_tag(original,e)
+              if np is not None and re.match(r'<Sequence\b[^>]*DisplayName="CreateStep\d+"',original[np:]):
+                  ns,ne=element_span(original,np)
+                  if 'EntityName="crm2p_sms"' in original[ns:ne]:skipped.append(display);continue
+              new_name=f'CreateStep{next_id}';next_id+=1
               clone=template.replace('CreateStep424',new_name)
-
               guid_map={}
               def repl_guid(m):
-                  raw=m.group(0); key=raw.strip('{}').lower()
-                  if key not in guid_map: guid_map[key]=str(uuid.uuid4())
+                  raw=m.group(0);key=raw.strip('{}').lower()
+                  if key not in guid_map:guid_map[key]=str(uuid.uuid4())
                   new=guid_map[key]
-                  return ('{' if raw.startswith('{') else '') + new + ('}' if raw.endswith('}') else '')
+                  return ('{' if raw.startswith('{') else '')+new+('}' if raw.endswith('}') else '')
               clone=guid_re.sub(repl_guid,clone)
               clone=replace_description_parameters(clone,new_name,message_expr)
               ET.fromstring(clone)
-              if 'EntityName="crm2p_sms"' not in clone or message_expr not in clone:
-                  raise ValueError(f'Validation failed for {new_name}')
+              if 'EntityName="crm2p_sms"' not in clone or message_expr not in clone:raise ValueError(f'Validation failed for {new_name}')
+              for _,_,v in var_nodes:variable_insertions.append(v.replace('CreateStep424',new_name))
+              added.append((display,new_name));insertions.append((e,'\n'+clone))
 
-              # Clone every workflow variable used by the copied sequence.
-              for _,_,v in var_nodes:
-                  variable_insertions.append(v.replace('CreateStep424',new_name))
-              added.append((display,new_name)); insertions.append((e,'\n'+clone))
-
-          if not added: raise SystemExit('No new steps added')
-
-          # Add cloned variable declarations once per generated step.
-          close = '</mxswa:Workflow.Variables>'
-          if close not in original: raise SystemExit('Workflow.Variables closing tag not found')
-          original = original.replace(close, '\n      ' + '\n      '.join(variable_insertions) + '\n    ' + close, 1)
-
-          for pos,clone in reversed(insertions):
-              original=original[:pos]+clone+original[pos:]
-
+          if not added:raise SystemExit('No new steps added')
+          close='</mxswa:Workflow.Variables>'
+          if close not in original:raise SystemExit('Workflow.Variables closing tag not found')
+          original=original.replace(close,'\n      '+'\n      '.join(variable_insertions)+'\n    '+close,1)
+          for pos,clone in reversed(insertions):original=original[:pos]+clone+original[pos:]
           ET.fromstring(original)
-          print('Existing SMS timeline steps skipped:', len(skipped))
-          print('New SMS timeline steps added:', len(added))
-          print('Generated variable declarations:', len(variable_insertions))
-          print('FINAL SendSms count:', len(sends))
-          print('FINAL CreateStep count:', len(re.findall(r'<Sequence\b[^>]*DisplayName="CreateStep\d+"', original)))
+          print('Existing SMS timeline steps skipped:',len(skipped))
+          print('New SMS timeline steps added:',len(added))
+          print('Generated variable declarations:',len(variable_insertions))
           Path(rel).write_text(original,encoding='utf-8')
 
       - name: Commit corrected workflow
