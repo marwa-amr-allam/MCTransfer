@@ -1,6 +1,7 @@
 name: Inspect original workflow XAML
 on:
-  workflow_dispatch:
+  push:
+    branches: [main]
 permissions:
   contents: read
 jobs:
@@ -26,16 +27,12 @@ jobs:
                   walk(c,path+'/'+lname(e.tag)+f'[{i}]')
           walk(root)
           print('SEND COUNT',len(sends))
-          for e,path,name in sends:
+          for e,path,name in sends[:3]:
               parent=None
               for candidate in root.iter():
                   if e in list(candidate): parent=candidate; break
               print('SEND',name,'parent=',lname(parent.tag) if parent is not None else None,'parent_children=',[lname(x.tag)+':'+x.attrib.get('DisplayName','') for x in list(parent)] if parent is not None else None)
-              break
-          # Print first CreateStep424 subtree shape from original
-          found=[]
-          for e in root.iter():
-              if e.attrib.get('DisplayName')=='CreateStep424': found.append(e)
+          found=[e for e in root.iter() if e.attrib.get('DisplayName')=='CreateStep424']
           print('CREATE424 COUNT',len(found))
           if found:
               e=found[0]
