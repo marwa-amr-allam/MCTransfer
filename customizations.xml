@@ -10535,6 +10535,26 @@
         </Descriptions>
       </RelationshipDescription>
     </EntityRelationship>
+    <EntityRelationship Name="crm2p_commercialreport_crm2p_smses">
+      <EntityRelationshipType>OneToMany</EntityRelationshipType>
+      <IsCustomizable>1</IsCustomizable>
+      <IntroducedVersion>1.0</IntroducedVersion>
+      <IsHierarchical>0</IsHierarchical>
+      <ReferencingEntityName>crm2p_sms</ReferencingEntityName>
+      <ReferencedEntityName>crm2p_CommercialReport</ReferencedEntityName>
+      <CascadeAssign>Cascade</CascadeAssign>
+      <CascadeDelete>Cascade</CascadeDelete>
+      <CascadeReparent>Cascade</CascadeReparent>
+      <CascadeShare>Cascade</CascadeShare>
+      <CascadeUnshare>Cascade</CascadeUnshare>
+      <ReferencingAttributeName>RegardingObjectId</ReferencingAttributeName>
+      <RelationshipDescription>
+        <Descriptions>
+          <Description description="المعرف الفريد للكائن المقترن به النشاط." languagecode="1025" />
+          <Description description="Unique identifier of the object with which the activity is associated." languagecode="1033" />
+        </Descriptions>
+      </RelationshipDescription>
+    </EntityRelationship>
     <EntityRelationship Name="crm2p_mangerapproval_crm2p_smses">
       <EntityRelationshipType>OneToMany</EntityRelationshipType>
       <IsCustomizable>1</IsCustomizable>
